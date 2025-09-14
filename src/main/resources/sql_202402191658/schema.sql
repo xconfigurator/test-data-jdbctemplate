@@ -1,0 +1,3 @@
+CREATE TABLE `bar` (
+    `foo` int(20) unsigned zerofill DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;

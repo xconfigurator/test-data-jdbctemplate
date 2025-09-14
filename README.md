@@ -15,3 +15,13 @@ git push -u origin main
 …or import code from another repository
 You can initialize this repository with code from a Subversion, Mercurial, or TFS project.
 ```
+
+## 环境准备
+Spring Boot能够自动执行DDL, DML。
+- schema.sql
+- data.sql
+脚本在类路径上自动加载。
+```shell
+# 如需自动加载需要开启。默认是never
+spring.sql.init.mode=always
+```

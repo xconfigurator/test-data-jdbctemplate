@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:mysql://192.168.234.129:3306/test?useSSL=false&serverTimezone=GMT%2B8
+    #url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=GMT%2B8
+    #url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=Asia/Shanghai
+    # 202402191652 测试一下更多的连接参数
+    url: jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&autoReconnect=true
+    username: root
+    password: 123456
+  # 测试自动创建脚本
+  sql:
+    init:
+      mode: never #always 如果已有表，设置always会报表已存在错误。显然这个脚本很直接，没有Hibernate的那个更贴心，哈哈。
+      schema-locations:
+        - sql_202402191658/schema.sql
+        - sql_202402191658/data.sql
