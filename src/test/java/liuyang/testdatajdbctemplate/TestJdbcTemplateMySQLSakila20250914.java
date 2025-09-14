@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.ActiveProfiles;
@@ -11,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -48,11 +50,33 @@ public class TestJdbcTemplateMySQLSakila20250914 {
 
     @Test
     public void testQuery202509142045() {
-        final List<Actor> list = jdbcTemplate.query("select * from actor", new RowMapper<Actor>() {
+        String SQL = "select * from actor";
+
+        // 写法1： .query + RowMapper
+        System.out.println("==========================================");
+        jdbcTemplate.query(SQL, new RowMapper<Actor>() {
             @Override
             public Actor mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return null;
+                Actor actor = new Actor();
+                actor.setActorId(rs.getShort("actor_id"));
+                actor.setFirstName(rs.getString("first_name"));
+                actor.setLastName(rs.getString("last_name"));
+                // Timestamp -> LocalDateTime
+                actor.setLastUpdate(rs.getTimestamp("last_update").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                return actor;
             }
-        });
+        }).stream().forEach(System.out::println);
+
+
+        // 写法2： .queryForList + Entity
+        System.out.println("==========================================");
+        // TODO
+        // 参考视频：https://www.bilibili.com/video/BV1Km4y1k7bn?spm_id_from=333.788.player.switch&vd_source=8bd7b24b38e3e12c558d839b352b32f4&p=70
+        // 这个视频中有对BeanPropertyRowMapper的讲解。
+        //jdbcTemplate.queryForList(SQL, Actor.class).stream().forEach(System.out::println);// 有异常！
+        //jdbcTemplate.queryForList(SQL, new BeanPropertyRowMapper<Actor>()).stream().forEach(System.out::println);// 有异常！
+        //jdbcTemplate.query(SQL, new BeanPropertyRowMapper<Actor>()).stream().forEach(System.out::println);// 有异常！
     }
+
+
 }
